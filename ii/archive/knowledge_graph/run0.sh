@@ -12,5 +12,5 @@ docker run -it --rm --ipc=host \
     -w /workdir \
     ${IMAGE_NAME} \
     /bin/bash -c "\
-        python sample.py \
+        python main.py \
     "

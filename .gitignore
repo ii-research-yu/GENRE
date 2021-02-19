@@ -1,9 +1,8 @@
 data
 logs
 output
-src
 predictions
-models 
+models
 notebooks
 
 # Byte-compiled / optimized / DLL files
