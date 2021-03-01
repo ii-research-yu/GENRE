@@ -5,6 +5,7 @@ import logging
 from typing import Dict, List
 import itertools
 import csv
+from nltk.tokenize import sent_tokenize
 
 from genre import GENRE
 from genre.trie import Trie
@@ -39,7 +40,8 @@ if __name__ == '__main__':
 
     # load a document and separate sentences
     # TODO: load a document
-    sentences = ["In 1921, Einstein received a Nobel Prize."]
+    text = "God is Great! I won a lottery."
+    sentences = sent_tokenize(text)
 
     # register the sentence IDs
     sentence_list += sentences
@@ -65,9 +67,6 @@ if __name__ == '__main__':
             knowledge_graph.append([e0, e1, s_i])
 
     # output csv files
-    # TODO: KG.csv
     list_to_csv(knowledge_graph, fpath='kg.csv', columns=['entity ID1', 'entity ID2', 'sentence ID'])
-    # TODO: entity.csv
     values_to_csv(entity_list, fpath='entity.csv')
-    # TODO: sentence.csv
     values_to_csv(sentence_list, fpath='sentence.csv')
