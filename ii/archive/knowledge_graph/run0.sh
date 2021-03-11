@@ -10,6 +10,7 @@ docker run -it --rm --ipc=host \
     -v "$CURRENT_PATH"/data:/data \
     -v "$CURRENT_PATH"/models:/models \
     -w /workdir \
+    -e OC_CAUSE=1 \
     ${IMAGE_NAME} \
     /bin/bash
     # /bin/bash -c "\

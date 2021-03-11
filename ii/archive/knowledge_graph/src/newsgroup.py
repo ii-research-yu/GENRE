@@ -10,16 +10,12 @@ import csv
 import nltk
 from nltk.tokenize import sent_tokenize
 import glob
-from charset_normalizer import CharsetNormalizerMatches as CnM
 from sklearn.datasets import fetch_20newsgroups
 
 from genre import GENRE
 from genre.trie import Trie
 from genre.entity_linking import get_end_to_end_prefix_allowed_tokens_fn_fairseq
 from genre.utils import get_entity_spans_fairseq
-
-
-DATASET_DIR = '/data/20Newsgroups'
 
 
 def values_to_csv(values: List, fpath: str, columns: List[str] = ['id', 'values']) -> None:
@@ -40,20 +36,19 @@ def list_to_csv(table: List[List], fpath: str, columns: List[str] = None) -> Non
 
 if __name__ == '__main__':
     # init
+    sentence_list = []
+    entity_list = []
+    knowledge_graph = []
 
     # load the dataset
-    newsgroups = fetch_20newsgroups(subset='test')
+    newsgroups = fetch_20newsgroups(subset='all', categories=['alt.atheism'])  # TODO
 
     # load the model
     model = GENRE.from_pretrained("/models/fairseq_e2e_entity_linking_aidayago.tar.gz").eval()
 
     # separate the document into sentences
     nltk.download('punkt')
-    sentence_list = []
-    entity_list = []
-    knowledge_graph = []
     for doc in newsgroups.data:
-        # load document
         text = doc.replace('\n', ' ')
         sentences = sent_tokenize(text)
         sentence_list += sentences
@@ -82,3 +77,4 @@ if __name__ == '__main__':
     list_to_csv(knowledge_graph, fpath='kg.csv', columns=['entity ID1', 'entity ID2', 'sentence ID'])
     values_to_csv(entity_list, fpath='entity.csv')
     values_to_csv(sentence_list, fpath='sentence.csv')
+    print('Done!!')

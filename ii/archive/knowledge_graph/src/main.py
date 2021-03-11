@@ -1,3 +1,4 @@
+import sys
 import pickle
 import numpy as np
 from pprint import pprint
@@ -5,6 +6,7 @@ import logging
 from typing import Dict, List
 import itertools
 import csv
+import nltk
 from nltk.tokenize import sent_tokenize
 
 from genre import GENRE
@@ -41,6 +43,7 @@ if __name__ == '__main__':
     # load a document and separate sentences
     # TODO: load a document
     text = "God is Great! I won a lottery."
+    nltk.download('punkt')
     sentences = sent_tokenize(text)
 
     # register the sentence IDs

@@ -23,7 +23,7 @@ RUN python setup.py install
 
 # fairseq
 WORKDIR /tmp
-RUN apt-get install -y build-essential
+RUN apt-get update && apt-get install -y build-essential
 RUN git clone https://github.com/pytorch/fairseq
 WORKDIR /tmp/fairseq
 RUN pip install --editable ./
@@ -32,6 +32,7 @@ RUN pip install --editable ./
 WORKDIR /tmp
 RUN git clone https://github.com/facebookresearch/GENRE
 WORKDIR /tmp/GENRE
+RUN git checkout 4a37616e4120287c3da8e8a7a5fdf50e0732a37f
 RUN pip install -r requirements.txt
 RUN pip install --editable ./
 RUN pip install -U Cython h5py numpy
