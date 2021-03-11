@@ -11,6 +11,7 @@ docker run -it --rm --ipc=host \
     -v "$CURRENT_PATH"/models:/models \
     -w /workdir \
     ${IMAGE_NAME} \
-    /bin/bash -c "\
-        python main.py \
-    "
+    /bin/bash
+    # /bin/bash -c "\
+    #     python main.py \
+    # "
