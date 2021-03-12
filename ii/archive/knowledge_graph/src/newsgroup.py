@@ -41,37 +41,48 @@ if __name__ == '__main__':
     knowledge_graph = []
 
     # load the dataset
-    newsgroups = fetch_20newsgroups(subset='all', categories=['alt.atheism'])  # TODO
+    newsgroups = fetch_20newsgroups(subset='test', categories=['alt.atheism'])  # TODO
 
     # load the model
     model = GENRE.from_pretrained("/models/fairseq_e2e_entity_linking_aidayago.tar.gz").eval()
 
     # separate the document into sentences
+    print('preparing the data...', flush=True, end='')
     nltk.download('punkt')
     for doc in newsgroups.data:
+        print(doc)
+        sys.exit(1)
         text = doc.replace('\n', ' ')
         sentences = sent_tokenize(text)
         sentence_list += sentences
+        break
+    print('ok')
 
     # End-to-End Entity Linking
     # URL: https://github.com/facebookresearch/GENRE/blob/main/examples/fairseq.md#end-to-end-entity-linking
+    print('Generating the entity linking set ...', flush=True, end='')
     document_result = get_entity_spans_fairseq(
         model,
         sentence_list
     )
+    print('ok')
 
     # register entities
+    print('Registering the entities ...', flush=True, end='')
     for sentence_resuslt in document_result:
         entity_list += [e for _, _, e in sentence_resuslt]
     entity_list = list(set(entity_list))    # get unique entities
+    print('ok')
 
     # generate the knowledge graph
+    print('Generating the knowledge graph ...', flush=True, end='')
     for s_i, sentence_resuslt in enumerate(document_result):
         e_ids = []
         for _, _, entity in sentence_resuslt:
             e_ids.append(entity_list.index(entity))
         for e0, e1 in itertools.permutations(e_ids, 2):
             knowledge_graph.append([e0, e1, s_i])
+    print('ok')
 
     # output csv files
     list_to_csv(knowledge_graph, fpath='kg.csv', columns=['entity ID1', 'entity ID2', 'sentence ID'])
